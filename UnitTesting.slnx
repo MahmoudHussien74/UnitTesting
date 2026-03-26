@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Payroll/src/Payroll.csproj" />
+  <Project Path="Payroll/tests/Payroll.Tests/Payroll.Tests.csproj" />
+</Solution>
