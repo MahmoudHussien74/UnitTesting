@@ -13,10 +13,28 @@ The Payroll system is the primary vehicle for demonstrating unit testing techniq
 We use **xUnit** as our testing framework and **Moq** for dependency isolation. Our testing strategy follows these core pillars:
 
 #### 1. The AAA Pattern (Arrange, Act, Assert)
-Every test is structured to be readable and maintainable:
-- **Arrange**: Set up the employee data and mock dependencies.
-- **Act**: Execute the specific calculation method (e.g., `CalculateTax`).
-- **Assert**: Verify that the result matches the expected business rule.
+Every test is structured for maximum clarity and professionalism. Here is a real-world example from our suite:
+
+```csharp
+[Fact]
+public void CalculateTax_WhenBasicSalaryExceedsLowThreshold_ShouldReturnTaxAmount()
+{
+    // Arrange
+    var mockZone = new Mock<IZoneService>();
+    var processor = new SalarySlipProcessor(mockZone.Object);
+    
+    // Wage (600) * Days (20) = $12,000 (Exceeds $10,000 threshold)
+    var employee = new Employee { Wage = 600m, WorkingDays = 20 };
+
+    // Act
+    var actualTax = processor.CalculateTax(employee);
+
+    // Assert
+    // Using xUnit's Assert to verify the 2% tax rate for medium salaries
+    var expectedTax = 12000m * 0.02m; 
+    Assert.Equal(expectedTax, actualTax);
+}
+```
 
 #### 2. Dependency Isolation (Mocking)
 The `SalarySlipProcessor` depends on `IZoneService` to determine if a location is a "Danger Zone". To test the processor in isolation without real external data:
